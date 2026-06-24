@@ -95,16 +95,15 @@ The dataset contains approximately:
 - 25,000+ Rental Records
 - 12,000+ Off-Plan Records
 
-## Dashboard Screenshots
+## Dashboard Preview
 
 ### Executive Overview
 
-<img width="723" height="540" alt="page1" src="https://github.com/user-attachments/assets/4104b6cc-edac-4b75-84d4-7adf2e6e7ee1" />
-
+![Executive Overview](executive_overview.png)
 
 ### Investment Analysis
 
-<img width="725" height="543" alt="page2" src="https://github.com/user-attachments/assets/f447d2c6-0d90-4dd8-a9f3-ffeb8a92d755" />
+![Investment Analysis](investment_analysis.png)
 
 
 ## Project Structure
