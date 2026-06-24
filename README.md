@@ -26,4 +26,112 @@ The goal was to build a dashboard that not only visualizes market trends but als
 - DAX
 - GitHub
 
-- 
+- The dashboard consists of two pages:
+
+### 1. Executive Overview
+Provides a high-level view of Dubai's real estate market through:
+
+- Total Transactions
+- Average Property Price
+- Average Price per Sqft
+- Average Rental Yield
+- Total Communities
+- Top 10 Most Expensive Communities
+- Top 10 Highest Rental Yield Communities
+- Secondary vs Off-Plan Price Trends (2020-2026)
+
+### 2. Investment Analysis
+Focused on investment opportunities using:
+
+-- Property Price vs Rental Yield Scatter Plot
+- Annual Rental Income Bubble Analysis
+- Community-Level Rental Yield Comparison
+- Investment Opportunity Insights
+
+- ## Key Findings
+
+- Rental yields across Dubai communities range approximately between 7% and 11%.
+- Several communities offer strong rental returns despite moderate property prices.
+- Premium communities maintain healthy rental yields while commanding significantly higher property values.
+- Secondary and off-plan property prices have shown strong growth trends from 2020 onwards.
+- Certain communities provide attractive investment opportunities by balancing affordability and rental income potential.
+
+- ## Skills Demonstrated
+
+### SQL
+- Data Cleaning
+- Aggregations
+- Joins
+- Views
+- Trend Analysis
+- Rental Yield Analysis
+
+### Power BI
+- Data Modeling
+- DAX Measures
+- KPI Cards
+- Interactive Visualizations
+- Dashboard Design
+- Business Insights
+
+### Business Analysis
+- Investment Opportunity Assessment
+- Real Estate Market Analysis
+- Rental Yield Evaluation
+- Trend Identification
+
+- ## Dataset
+
+The project uses Dubai real estate market data covering:
+
+- Secondary Property Sales
+- Rental Transactions
+- Off-Plan Property Sales
+- Community-Level Property Prices
+
+The dataset contains approximately:
+
+- 50,000+ Secondary Sales Records
+- 25,000+ Rental Records
+- 12,000+ Off-Plan Records
+
+## Dashboard Screenshots
+
+### Executive Overview
+
+<img width="723" height="540" alt="page1" src="https://github.com/user-attachments/assets/4104b6cc-edac-4b75-84d4-7adf2e6e7ee1" />
+
+
+### Investment Analysis
+
+<img width="725" height="543" alt="page2" src="https://github.com/user-attachments/assets/f447d2c6-0d90-4dd8-a9f3-ffeb8a92d755" />
+
+
+## Project Structure
+
+Dubai-Real-Estate-Analytics/
+
+├── README.md
+
+├── SQL Queries/
+
+├── Power BI Dashboard/
+
+├── Screenshots/
+
+└── Documentation/
+
+
+## Future Improvements
+
+- Add geographic analysis using maps
+- Integrate metro accessibility analysis
+
+
+- ## Author
+
+Thithiksha S Anand
+
+Engineering graduate transitioning into Data Analytics with experience in real estate sales and business operations.
+
+Passionate about transforming data into actionable business insights using SQL and Power BI.
