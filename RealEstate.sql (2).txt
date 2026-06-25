@@ -1,0 +1,274 @@
+SHOW TABLES;
+DESCRIBE secondary_sales;
+DESCRIBE rentals;
+DESCRIBE off_plan;
+DESCRIBE metro_stations;
+
+SELECT 'secondary_sales' AS table_name, COUNT(*) AS total_rows
+FROM secondary_sales
+
+UNION ALL
+
+SELECT 'rentals', COUNT(*)
+FROM rentals
+
+UNION ALL
+
+SELECT 'off_plan', COUNT(*)
+FROM off_plan
+
+UNION ALL
+
+SELECT 'metro_stations', COUNT(*)
+FROM metro_stations;
+
+SELECT
+MIN(date_listed) AS first_date,
+MAX(date_listed) AS last_date
+FROM secondary_sales;
+SELECT
+MIN(date_listed) AS first_date,
+MAX(date_listed) AS last_date
+FROM rentals;
+SELECT
+MIN(date_listed) AS first_date,
+MAX(date_listed) AS last_date
+FROM secondary_sales;
+
+SELECT
+    community,
+    ROUND(SUM(price_usd),0) AS total_sales_usd
+FROM secondary_sales
+GROUP BY community
+ORDER BY total_sales_usd DESC
+LIMIT 10;
+
+SELECT
+    community,
+    COUNT(*) AS properties_sold
+FROM secondary_sales
+GROUP BY community
+ORDER BY properties_sold DESC
+LIMIT 10;
+
+SELECT
+    property_type,
+    ROUND(AVG(price_usd),0) AS avg_price_usd
+FROM secondary_sales
+GROUP BY property_type
+ORDER BY avg_price_usd DESC;
+
+SELECT
+    bedrooms,
+    COUNT(*) AS properties
+FROM secondary_sales
+GROUP BY bedrooms
+ORDER BY bedrooms;
+
+SELECT
+    metro_station,
+    ROUND(AVG(price_usd),0) AS avg_price_usd,
+    COUNT(*) AS properties
+FROM secondary_sales
+WHERE metro_station IS NOT NULL
+GROUP BY metro_station
+ORDER BY avg_price_usd DESC
+LIMIT 10;
+
+SELECT
+    YEAR(date_listed) AS sales_year,
+    COUNT(*) AS transactions,
+    ROUND(SUM(price_usd),0) AS total_sales
+FROM secondary_sales
+GROUP BY YEAR(date_listed)
+ORDER BY sales_year;
+
+SELECT
+    bedrooms,
+    ROUND(AVG(price_usd),0) AS avg_price
+FROM secondary_sales
+GROUP BY bedrooms
+ORDER BY bedrooms;
+
+SELECT
+    community,
+    ROUND(AVG(annual_rent_usd),0) AS avg_rent
+FROM rentals
+GROUP BY community
+ORDER BY avg_rent DESC
+LIMIT 10;
+
+SELECT
+    community,
+    ROUND(AVG(price_usd),0) AS avg_price
+FROM off_plan
+GROUP BY community
+ORDER BY avg_price DESC
+LIMIT 10;
+
+SELECT
+    s.community,
+    s.avg_sale_price,
+    r.avg_annual_rent,
+    ROUND(
+        (r.avg_annual_rent / s.avg_sale_price) * 100,
+        2
+    ) AS rental_yield_pct
+FROM
+(
+    SELECT
+        community,
+        AVG(price_usd) AS avg_sale_price
+    FROM secondary_sales
+    GROUP BY community
+) s
+JOIN
+(
+    SELECT
+        community,
+        AVG(annual_rent_usd) AS avg_annual_rent
+    FROM rentals
+    GROUP BY community
+) r
+ON s.community = r.community
+ORDER BY rental_yield_pct DESC
+LIMIT 15;
+
+SELECT
+    community,
+    COUNT(*) AS transactions,
+    ROUND(AVG(price_usd),0) AS avg_price
+FROM secondary_sales
+GROUP BY community
+ORDER BY transactions DESC
+LIMIT 15;
+
+SELECT
+    property_type,
+    ROUND(AVG(area_sqft),0) AS avg_size_sqft,
+    ROUND(AVG(price_usd),0) AS avg_price
+FROM secondary_sales
+GROUP BY property_type
+ORDER BY avg_price DESC;
+
+SELECT DISTINCT furnishing FROM secondary_sales;
+
+SELECT
+    furnishing,
+    COUNT(*) AS properties,
+    ROUND(AVG(price_usd),0) AS avg_price
+FROM secondary_sales
+GROUP BY furnishing
+ORDER BY avg_price DESC;
+
+SHOW COLUMNS FROM secondary_sales;
+
+SELECT
+    community,
+    ROUND(AVG(price_usd / area_sqft),2) AS price_per_sqft
+FROM secondary_sales
+WHERE area_sqft > 0
+GROUP BY community
+ORDER BY price_per_sqft DESC
+LIMIT 15;
+
+SELECT
+    parking_spaces,
+    COUNT(*) AS properties,
+    ROUND(AVG(price_usd),0) AS avg_price
+FROM secondary_sales
+WHERE parking_spaces IS NOT NULL
+GROUP BY parking_spaces
+ORDER BY parking_spaces;
+
+SELECT
+    metro_distance_min,
+    COUNT(*) AS properties,
+    ROUND(AVG(price_usd),0) AS avg_price
+FROM secondary_sales
+WHERE metro_distance_min IS NOT NULL
+GROUP BY metro_distance_min
+ORDER BY metro_distance_min;
+
+SELECT
+    is_freehold,
+    COUNT(*) AS properties,
+    ROUND(AVG(price_usd),0) AS avg_price
+FROM secondary_sales
+GROUP BY is_freehold;
+
+
+
+SELECT
+    metro_line,
+    COUNT(*) AS properties,
+    ROUND(AVG(price_usd),0) AS avg_price
+FROM secondary_sales
+WHERE metro_line IS NOT NULL
+GROUP BY metro_line
+ORDER BY avg_price DESC;
+
+CREATE VIEW vw_sales_analysis AS
+SELECT
+    date_listed,
+    community,
+    property_type,
+    bedrooms,
+    area_sqft,
+    furnishing,
+    is_freehold,
+    parking_spaces,
+    metro_line,
+    metro_distance_min,
+    price_usd,
+    price_per_sqft_usd
+FROM secondary_sales;
+
+CREATE VIEW vw_rental_yield AS
+SELECT
+    s.community,
+    ROUND(AVG(s.price_usd),0) AS avg_sale_price,
+    ROUND(AVG(r.annual_rent_usd),0) AS avg_annual_rent,
+    ROUND(
+        (AVG(r.annual_rent_usd) / AVG(s.price_usd)) * 100,
+        2
+    ) AS rental_yield_pct
+FROM
+(
+    SELECT community, AVG(price_usd) AS price_usd
+    FROM secondary_sales
+    GROUP BY community
+) s
+JOIN
+(
+    SELECT community, AVG(annual_rent_usd) AS annual_rent_usd
+    FROM rentals
+    GROUP BY community
+) r
+ON s.community = r.community
+GROUP BY s.community;
+
+CREATE VIEW vw_community_summary AS
+SELECT
+    community,
+    COUNT(*) AS transactions,
+    ROUND(AVG(price_usd),0) AS avg_price,
+    ROUND(AVG(price_per_sqft_usd),2) AS avg_price_per_sqft
+FROM secondary_sales
+GROUP BY community;
+
+CREATE VIEW vw_offplan_summary AS
+SELECT
+    community,
+    COUNT(*) AS projects,
+    ROUND(AVG(price_usd),0) AS avg_price
+FROM off_plan
+GROUP BY community;
+
+SELECT * FROM vw_sales_analysis LIMIT 5;
+
+SELECT * FROM vw_rental_yield LIMIT 5;
+
+SELECT * FROM vw_community_summary LIMIT 5;
+
+SELECT * FROM vw_offplan_summary LIMIT 5;
